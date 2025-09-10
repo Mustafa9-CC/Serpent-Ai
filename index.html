@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serpent AI - Emergency Snake Identification</title>
+    <meta name="description" content="AI-powered snake identification for emergency medical response">
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#87CEEB">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <!-- Emergency Banner -->
+    <div class="emergency-banner">
+        <span class="emergency-text">🚨 EMERGENCY: 108</span>
+        <button class="emergency-call" onclick="window.open('tel:108')">CALL NOW</button>
+    </div>
+
+    <!-- Header with exact positioning -->
+    <header class="app-header">
+        <div class="header-content">
+            <!-- Logo - TOP LEFT -->
+            <button class="logo-btn" id="logoBtn">
+                <div class="logo-content">
+                    <div class="snake-icon">🐍</div>
+                    <span class="logo-text">Serpent AI</span>
+                </div>
+            </button>
+            
+            <!-- Profile/Login - TOP RIGHT -->
+            <button class="profile-btn" id="profileBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Screen -->
+        <section class="screen active" id="homeScreen">
+            <!-- Welcome text ABOVE upload card -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome to Serpent AI</h1>
+                <p class="welcome-subtitle">Your Health-Tech Companion for Smarter Medical Image Upload & AI Insights.</p>
+            </div>
+
+            <!-- Central upload card -->
+            <div class="upload-section">
+                <div class="upload-card">
+                    <div class="upload-header">Upload Photo</div>
+                    
+                    <!-- Large cloud icon with upward arrow -->
+                    <div class="cloud-icon-container">
+                        <svg class="cloud-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                        </svg>
+                        <div class="upload-arrow">↑</div>
+                    </div>
+                    
+                    <!-- Two rounded square buttons -->
+                    <div class="upload-buttons">
+                        <button class="upload-btn square-btn" id="cameraBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            <span>Click to Upload</span>
+                        </button>
+                        
+                        <button class="upload-btn square-btn" id="fileBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>Select to Upload</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Identify by Presence button BELOW upload buttons -->
+                    <button class="identify-btn" id="identifyBtn">
+                        Identify by Presence
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Camera Screen -->
+        <section class="screen" id="cameraScreen">
+            <div class="camera-container">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="captureCanvas" style="display: none;"></canvas>
+                <div class="camera-controls">
+                    <button class="btn btn--secondary" id="closeCameraBtn">Cancel</button>
+                    <button class="btn btn--primary capture-btn" id="captureBtn">
+                        <div class="capture-ring"></div>
+                    </button>
+                    <button class="btn btn--secondary" id="switchCameraBtn">Switch</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Preview Screen -->
+        <section class="screen" id="previewScreen">
+            <div class="preview-container">
+                <img id="previewImage" alt="Captured snake image">
+                <div class="preview-controls">
+                    <button class="btn btn--secondary" id="retakeBtn">Retake</button>
+                    <button class="btn btn--primary" id="analyzeBtn">
+                        <div class="analyzing-spinner" style="display: none;"></div>
+                        Analyze Snake
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Screen -->
+        <section class="screen" id="resultsScreen">
+            <div class="results-container">
+                <!-- Immediate Actions Card -->
+                <div class="result-card priority-card">
+                    <h2>⚠️ IMMEDIATE ACTIONS</h2>
+                    <div id="immediateActions"></div>
+                </div>
+
+                <!-- Treatment Timer -->
+                <div class="result-card timer-card" id="timerCard" style="display: none;">
+                    <h3>Treatment Timer</h3>
+                    <div class="timer-display">
+                        <div class="timer-circle">
+                            <div class="timer-text">
+                                <span id="timerHours">00</span>:<span id="timerMinutes">00</span>:<span id="timerSeconds">00</span>
+                            </div>
+                        </div>
+                        <p id="timerMessage"></p>
+                    </div>
+                </div>
+
+                <!-- Nearest Hospitals -->
+                <div class="result-card">
+                    <h3>🏥 NEAREST HOSPITALS</h3>
+                    <div id="hospitalsList"></div>
+                </div>
+
+                <!-- Snake Identification -->
+                <div class="result-card">
+                    <h3>🐍 Snake Identification</h3>
+                    <div id="snakeDetails"></div>
+                </div>
+
+                <!-- Symptoms Timeline -->
+                <div class="result-card">
+                    <h3>📊 Expected Symptoms Timeline</h3>
+                    <div id="symptomsTimeline"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Questionnaire Screen -->
+        <section class="screen" id="questionnaireScreen">
+            <div class="questionnaire-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="question-card">
+                    <h2 id="questionTitle">Snake Identification Questions</h2>
+                    <p id="questionText"></p>
+                    <div class="options-container" id="optionsContainer"></div>
+                    <div class="question-controls">
+                        <button class="btn btn--secondary" id="prevQuestionBtn" style="display: none;">Previous</button>
+                        <button class="btn btn--primary" id="nextQuestionBtn" style="display: none;">Next</button>
+                        <button class="btn btn--primary" id="finishQuestionBtn" style="display: none;">Get Results</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location Screen -->
+        <section class="screen" id="locationScreen">
+            <div class="location-container">
+                <h2>📍 Hospital Locations</h2>
+                <div class="location-controls">
+                    <button class="btn btn--primary" id="getCurrentLocation">
+                        📍 Get Current Location
+                    </button>
+                </div>
+                <div id="hospitalsMap"></div>
+            </div>
+        </section>
+
+        <!-- Activity Screen -->
+        <section class="screen" id="activityScreen">
+            <div class="activity-container">
+                <h2>📋 Activity History</h2>
+                <div id="activityList">
+                    <p>No previous identifications yet.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation with three specific icons -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-screen="homeScreen">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9,22 9,12 15,12 15,22"></polyline>
+            </svg>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-screen="locationScreen">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Location</span>
+        </button>
+        <button class="nav-item" data-screen="activityScreen">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Activity</span>
+        </button>
+    </nav>
+
+    <!-- Loading Modal -->
+    <div class="modal hidden" id="loadingModal">
+        <div class="modal-content">
+            <div class="loading-animation">
+                <div class="snake-coil"></div>
+                <p>AI is analyzing your image...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Input -->
+    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+    <script src="app.js"></script>
+</body>
+</html>
