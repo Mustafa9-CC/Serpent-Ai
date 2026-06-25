@@ -36,8 +36,8 @@ It is designed for travelers, newcomers, and rural communities where snakebite e
 - ✅ Mobile app version (PWA or Flutter).  
 
 👨‍💻Authors
-Kashif Ansari-rayzkashif@gmail.com,
-Mohd Mustafa-m90582m@gmail.com
+Kashif Ansari -rayzkashif@gmail.com,
+Mohd Mustafa -m90582m@gmail.com
 
 
 
